@@ -28,6 +28,62 @@ model Session {
   locale        String?
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
-  refreshToken        String?
-  refreshTokenExpires DateTime?
+}
+
+
+model Visit {
+  id           Int      @id @default(autoincrement())
+  shop         String   @default("")
+  source       String   @default("")
+  medium       String   @default("")
+  campaign     String   @default("")
+  channel      String   @default("")
+  landingPage  String   @default("") @map("landing_page")
+  referrer     String   @default("")
+  clickIdType  String   @default("") @map("click_id_type")
+  visitorHash  String   @default("") @map("visitor_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([shop])
+  @@index([shop, channel])
+  @@index([shop, source])
+  @@index([shop, createdAt])
+  @@index([shop, visitorHash])
+  @@map("tyt_visits")
+}
+
+model Campaign {
+  id          Int       @id @default(autoincrement())
+  shop        String    @default("")
+  name        String    @default("")
+  slug        String    @default("")
+  source      String    @default("")
+  medium      String    @default("")
+  campaign    String    @default("")
+  term        String    @default("")
+  content     String    @default("")
+  status      String    @default("active")
+  goalVisits  Int       @default(0) @map("goal_visits")
+  tags        String    @default("")
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  notes       String    @default("")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@unique([shop, slug])
+  @@index([shop])
+  @@index([shop, status])
+  @@map("tyt_campaigns")
+}
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  shop      String   @default("")
+  key       String   @default("")
+  value     String   @default("")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([shop, key])
+  @@map("tyt_settings")
 }

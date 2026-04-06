@@ -1,8 +1,4 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron/cleanup",
-      "schedule": "0 2 * * *"
-    }
-  ]
+  "buildCommand": "npx prisma migrate deploy && npm run build",
+  "installCommand": "npm install --legacy-peer-deps"
 }

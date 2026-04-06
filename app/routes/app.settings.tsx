@@ -182,7 +182,7 @@ export default function SettingsPage() {
     : [...RETENTION_OPTIONS, { value: form.retention_days, label: `Custom (${form.retention_days} days)` }];
 
   return (
-    <s-page heading="Settings">
+    <s-page heading="Settings" inline-size="full">
       <s-button
         slot="primary-action"
         variant="primary"

@@ -279,7 +279,7 @@ export default function CampaignsPage() {
   ];
 
   return (
-    <s-page heading="Campaigns">
+    <s-page heading="Campaigns" inline-size="full">
       {/* Primary action */}
       <s-button
         slot="primary-action"

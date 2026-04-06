@@ -191,7 +191,7 @@ export default function CampaignStatsPage() {
           .cs-detail-grid { grid-template-columns: 1fr; }
         }
       `}</style>
-    <s-page heading={campaign.name}>
+    <s-page heading={campaign.name} inline-size="full">
       <s-link
         slot="breadcrumb-actions"
         onClick={(e: any) => { e.preventDefault(); navigate("/app/campaigns"); }}

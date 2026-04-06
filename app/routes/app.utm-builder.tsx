@@ -667,7 +667,7 @@ export default function UtmBuilderPage() {
   };
 
   return (
-    <s-page heading="UTM Link Builder">
+    <s-page heading="UTM Link Builder" inline-size="full">
       <s-section padding="none">
         <s-box padding="base">
           <s-stack direction="inline" gap="small-200">

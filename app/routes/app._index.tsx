@@ -215,7 +215,7 @@ export default function Dashboard() {
   const totalDeviceVisits = stats.byDevice.reduce((s, r) => s + r.visits, 0) || 1;
 
   return (
-    <s-page heading="Track Your Traffic" inline-size="large">
+    <s-page heading="Track Your Traffic" inline-size="full">
       <style>{`
         .tyt-kpi-grid      { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
         .tyt-two-col-grid  { display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:0 0 16px; }

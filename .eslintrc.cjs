@@ -50,6 +50,10 @@ module.exports = {
       },
       rules: {
         "react/no-unknown-property": ["error", { ignore: ["variant"] }],
+        // Shopify Surface web components use unquoted text content regularly
+        "react/no-unescaped-entities": "off",
+        // Shopify web component event handlers require hasOwnProperty on passed objects
+        "no-prototype-builtins": "off",
       },
     },
 
@@ -75,6 +79,10 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        // Shopify Surface web component event handlers require `any` — no typed alternatives exist
+        "@typescript-eslint/no-explicit-any": "off",
+      },
     },
 
     // Node

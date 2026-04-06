@@ -95,7 +95,7 @@ const RETENTION_OPTIONS = [
 type Tab = "tracking" | "privacy" | "retention" | "data";
 
 export default function SettingsPage() {
-  const { settings, visitCount, shop, dbSizeBytes } = useLoaderData<typeof loader>();
+  const { settings, visitCount, dbSizeBytes } = useLoaderData<typeof loader>();
   const revalidator = useRevalidator();
 
   const [tab,    setTab]    = useState<Tab>("tracking");

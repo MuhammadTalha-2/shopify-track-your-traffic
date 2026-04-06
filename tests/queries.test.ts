@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 import { prisma, SHOP_A, SHOP_B } from "./setup";
 import {
   getTotals,

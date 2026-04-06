@@ -194,7 +194,6 @@ export default function CampaignStatsPage() {
     <s-page heading={campaign.name}>
       <s-link
         slot="breadcrumb-actions"
-        suppressHydrationWarning
         onClick={(e: any) => { e.preventDefault(); navigate("/app/campaigns"); }}
       >
         Campaigns

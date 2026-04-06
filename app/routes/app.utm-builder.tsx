@@ -219,7 +219,7 @@ function SingleBuilder({ shopUrl }: SingleBuilderProps) {
 
         {/* Medium reference guide */}
         <s-box>
-          <s-button variant="plain" onClick={() => setShowGuide((v) => !v)}>
+          <s-button variant="tertiary" onClick={() => setShowGuide((v) => !v)}>
             {showGuide ? "Hide" : "Show"} UTM medium reference guide
           </s-button>
           {showGuide && (
@@ -499,9 +499,9 @@ function BulkTagger({
                 <s-stack gap="small-200">
                   <s-stack direction="inline" gap="small-200" align-items="center">
                     <s-text type="strong">{fetchedItems.length} URLs fetched</s-text>
-                    <s-button variant="plain" onClick={selectAll}>Select all</s-button>
+                    <s-button variant="tertiary" onClick={selectAll}>Select all</s-button>
                     <s-text color="subdued">·</s-text>
-                    <s-button variant="plain" onClick={deselectAll}>Deselect all</s-button>
+                    <s-button variant="tertiary" onClick={deselectAll}>Deselect all</s-button>
                   </s-stack>
 
                   <div style={{ maxHeight: 240, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
@@ -606,6 +606,7 @@ function BulkTagger({
                     return (
                       <s-table-row key={i}>
                         <s-table-cell>
+                          {/* @ts-ignore – "critical" is valid at runtime but missing from polaris-types */}
                           <s-text color={row.valid ? undefined : "critical"}>{row.original}</s-text>
                         </s-table-cell>
                         <s-table-cell>

@@ -281,11 +281,11 @@ export default function SettingsPage() {
                     <strong>{ipLoading ? "detecting…" : detectedIp || "—"}</strong>
                   </s-text>
                   {detectedIp && (
-                    <s-button variant="plain" onClick={addMyIp}>
+                    <s-button variant="tertiary" onClick={addMyIp}>
                       + Add to list
                     </s-button>
                   )}
-                  <s-button variant="plain" onClick={fetchMyIp} disabled={ipLoading ? true : undefined}>
+                  <s-button variant="tertiary" onClick={fetchMyIp} disabled={ipLoading ? true : undefined}>
                     {ipLoading ? "Detecting…" : "Re-detect"}
                   </s-button>
                 </s-stack>

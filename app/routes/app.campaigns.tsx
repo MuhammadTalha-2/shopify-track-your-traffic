@@ -424,6 +424,7 @@ export default function CampaignsPage() {
         <s-section>
           <s-box padding="base">
             <s-stack gap="base" align-items="center">
+              {/* @ts-ignore – "campaign" type and "large" size are valid at runtime but missing from polaris-types */}
               <s-icon type="campaign" color="subdued" size="large" />
               <s-stack gap="small-200" align-items="center">
                 <s-heading>

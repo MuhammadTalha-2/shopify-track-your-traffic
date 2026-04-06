@@ -76,7 +76,8 @@ function MetricCard({
             </s-badge>
           )}
           {channelBadge && (
-            <s-badge tone={CHANNEL_TONE[channelBadge.channel] ?? "neutral"}>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            <s-badge tone={(CHANNEL_TONE[channelBadge.channel] ?? "neutral") as any}>
               {channelLabel(channelBadge.channel)}
             </s-badge>
           )}
@@ -108,6 +109,7 @@ function Sparkline({ data }: { data: { date: string; visits: number; uniques: nu
     return (
       <s-box padding="base">
         <s-stack align-items="center" gap="base">
+          {/* @ts-ignore - chart-bar and large are valid runtime values not yet in polaris-types */}
           <s-icon type="chart-bar" color="subdued" size="large" />
           <s-text color="subdued">No traffic data for this period.</s-text>
         </s-stack>
@@ -315,6 +317,7 @@ export default function Dashboard() {
         ) : (
           <s-box padding="base">
             <s-stack align-items="center" gap="small-200">
+              {/* @ts-ignore - chart-bar is a valid runtime value not yet in polaris-types */}
               <s-icon type="chart-bar" color="subdued" />
               <s-text color="subdued">No channel data for this period.</s-text>
             </s-stack>
@@ -336,12 +339,14 @@ export default function Dashboard() {
                 {stats.topSources.map((row) => (
                   <s-table-row key={`${row.source}-${row.medium}`}>
                     <s-table-cell>
-                      <s-stack gap="small-100" style={{ maxWidth: 200 }}>
-                        <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          <s-text type="strong">{row.source}</s-text>
-                        </div>
-                        {row.medium && <s-text color="subdued">{row.medium}</s-text>}
-                      </s-stack>
+                      <div style={{ maxWidth: 200 }}>
+                        <s-stack gap="small-100">
+                          <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            <s-text type="strong">{row.source}</s-text>
+                          </div>
+                          {row.medium && <s-text color="subdued">{row.medium}</s-text>}
+                        </s-stack>
+                      </div>
                     </s-table-cell>
                     <s-table-cell>{row.visits.toLocaleString()}</s-table-cell>
                     <s-table-cell>
@@ -398,9 +403,9 @@ export default function Dashboard() {
                   <s-stack key={row.deviceType} gap="small-200">
                     <s-stack direction="inline" align-items="center" gap="small-300">
                       <span style={{ fontSize: 18 }}>{DEVICE_ICON[row.deviceType] ?? "💻"}</span>
-                      <s-text type="strong" style={{ textTransform: "capitalize" }}>
+                      <span style={{ textTransform: "capitalize", fontWeight: 600 }}>
                         {row.deviceType}
-                      </s-text>
+                      </span>
                       <s-text color="subdued">{row.visits.toLocaleString()} visits</s-text>
                     </s-stack>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

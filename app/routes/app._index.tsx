@@ -109,7 +109,7 @@ function Sparkline({ data }: { data: { date: string; visits: number; uniques: nu
     return (
       <s-box padding="base">
         <s-stack align-items="center" gap="base">
-          {/* @ts-ignore - chart-bar and large are valid runtime values not yet in polaris-types */}
+          {/* @ts-expect-error - chart-bar and large are valid runtime values not yet in polaris-types */}
           <s-icon type="chart-bar" color="subdued" size="large" />
           <s-text color="subdued">No traffic data for this period.</s-text>
         </s-stack>
@@ -317,7 +317,7 @@ export default function Dashboard() {
         ) : (
           <s-box padding="base">
             <s-stack align-items="center" gap="small-200">
-              {/* @ts-ignore - chart-bar is a valid runtime value not yet in polaris-types */}
+              {/* @ts-expect-error - chart-bar is a valid runtime value not yet in polaris-types */}
               <s-icon type="chart-bar" color="subdued" />
               <s-text color="subdued">No channel data for this period.</s-text>
             </s-stack>

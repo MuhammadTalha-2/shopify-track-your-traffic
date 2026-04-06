@@ -606,7 +606,7 @@ function BulkTagger({
                     return (
                       <s-table-row key={i}>
                         <s-table-cell>
-                          {/* @ts-ignore – "critical" is valid at runtime but missing from polaris-types */}
+                          {/* @ts-expect-error – "critical" is valid at runtime but missing from polaris-types */}
                           <s-text color={row.valid ? undefined : "critical"}>{row.original}</s-text>
                         </s-table-cell>
                         <s-table-cell>

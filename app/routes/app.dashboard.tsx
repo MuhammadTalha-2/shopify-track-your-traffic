@@ -270,7 +270,6 @@ export default function Dashboard() {
             label="Top Channel"
             value={topChannel ? channelLabel(topChannel.channel) : "—"}
             subtext={topChannel ? `${topChannel.visits.toLocaleString()} visits` : "No data yet"}
-            channelBadge={topChannel ? { channel: topChannel.channel } : undefined}
           />
           <MetricCard
             label="Today"

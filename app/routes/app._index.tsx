@@ -4,5 +4,6 @@ import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
-  throw redirect("/app/dashboard");
+  const url = new URL(request.url);
+  throw redirect(`/app/dashboard${url.search}`);
 };

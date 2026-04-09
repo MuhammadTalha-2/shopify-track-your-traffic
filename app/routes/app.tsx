@@ -1,5 +1,5 @@
 import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
-import { Outlet, useLoaderData, useRouteError, useLocation, useNavigate, useNavigation } from "react-router";
+import { Outlet, useLoaderData, useRouteError, useNavigation } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 
@@ -39,16 +39,8 @@ const loadingKeyframes = `
 
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
   const navigation = useNavigation();
-
   const isLoading = navigation.state !== "idle";
-
-  const isActive = (href: string) =>
-    href === "/app"
-      ? pathname === "/app" || pathname === "/app/"
-      : pathname === href || pathname.startsWith(href + "/");
 
   return (
     <AppProvider embedded apiKey={apiKey}>
@@ -57,16 +49,11 @@ export default function App() {
       {/* Top loading bar */}
       {isLoading && <div style={loadingBarStyle} />}
 
+      {/* s-link children let s-app-nav handle active state via longest-prefix matching */}
       <s-app-nav>
         {NAV_LINKS.map(({ href, label }) => (
-          <a
-            key={href}
-            href={href}
-            aria-current={isActive(href) ? "page" : undefined}
-            onClick={(e) => { e.preventDefault(); navigate(href); }}
-          >
-            {label}
-          </a>
+          // @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs
+          <s-link key={href} href={href}>{label}</s-link>
         ))}
       </s-app-nav>
 

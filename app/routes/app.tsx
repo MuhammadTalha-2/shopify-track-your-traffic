@@ -13,7 +13,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 const NAV_LINKS = [
-  { href: "/app",             label: "Dashboard" },
   { href: "/app/campaigns",   label: "Campaigns" },
   { href: "/app/utm-builder", label: "UTM Builder" },
   { href: "/app/settings",    label: "Settings" },
@@ -49,8 +48,10 @@ export default function App() {
       {/* Top loading bar */}
       {isLoading && <div style={loadingBarStyle} />}
 
-      {/* s-link children let s-app-nav handle active state via longest-prefix matching */}
       <s-app-nav>
+        {/* rel="home" registers Dashboard as the home route (app logo navigates here) */}
+        {/* @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs */}
+        <s-link href="/app" rel="home">Dashboard</s-link>
         {NAV_LINKS.map(({ href, label }) => (
           // @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs
           <s-link key={href} href={href}>{label}</s-link>

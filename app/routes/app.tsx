@@ -13,6 +13,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 const NAV_LINKS = [
+  { href: "/app/dashboard",   label: "Dashboard" },
   { href: "/app/campaigns",   label: "Campaigns" },
   { href: "/app/utm-builder", label: "UTM Builder" },
   { href: "/app/settings",    label: "Settings" },
@@ -49,9 +50,9 @@ export default function App() {
       {isLoading && <div style={loadingBarStyle} />}
 
       <s-app-nav>
-        {/* rel="home" registers Dashboard as the home route (app logo navigates here) */}
+        {/* hidden home route — registers /app as home for the app logo */}
         {/* @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs */}
-        <s-link href="/app" rel="home">Dashboard</s-link>
+        <s-link href="/app" rel="home">Home</s-link>
         {NAV_LINKS.map(({ href, label }) => (
           // @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs
           <s-link key={href} href={href}>{label}</s-link>

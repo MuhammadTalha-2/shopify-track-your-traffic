@@ -24,7 +24,7 @@ const loadingBarStyle: React.CSSProperties = {
   top: 0,
   left: 0,
   height: 3,
-  background: "linear-gradient(90deg, #6c63ff, #a78bfa)",
+  background: "linear-gradient(90deg, #1a1a1a, #4a4a4a)",
   zIndex: 9999,
   animation: "tyt-loading 1.2s ease-in-out infinite",
 };
@@ -44,7 +44,10 @@ export default function App() {
 
   return (
     <AppProvider embedded apiKey={apiKey}>
-      <style>{loadingKeyframes}</style>
+      <style>{`
+        ${loadingKeyframes}
+        s-page::part(page) { padding-inline: 0.5rem !important; }
+      `}</style>
 
       {/* Top loading bar */}
       {isLoading && <div style={loadingBarStyle} />}
@@ -54,7 +57,6 @@ export default function App() {
         {/* @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs */}
         <s-link href="/app" rel="home">Home</s-link>
         {NAV_LINKS.map(({ href, label }) => (
-          // @ts-expect-error – s-link is valid inside s-app-nav per Shopify docs
           <s-link key={href} href={href}>{label}</s-link>
         ))}
       </s-app-nav>

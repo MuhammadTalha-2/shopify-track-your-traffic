@@ -64,8 +64,8 @@ export default function App() {
       {/* Stats bar */}
       <div className={styles.stats}>
         <div className={styles.stat}>
-          <span className={styles.statValue}>100%</span>
-          <span className={styles.statLabel}>Free to use</span>
+          <span className={styles.statValue}>UTM</span>
+          <span className={styles.statLabel}>Attribution</span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>Real-time</span>

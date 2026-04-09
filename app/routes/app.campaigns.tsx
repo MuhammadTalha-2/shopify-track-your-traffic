@@ -189,6 +189,7 @@ export default function CampaignsPage() {
   const [formData, setFormData]       = useState<CampaignFormData>(EMPTY_FORM);
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
   const [pendingModal, setPendingModal] = useState<"form" | "delete" | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const set = (field: keyof CampaignFormData) => (e: any) => {
     // s-number-field and s-date-field dispatch CustomEvent with value in e.detail;
@@ -227,14 +228,19 @@ export default function CampaignsPage() {
 
   const handleSubmit = useCallback(async () => {
     const intent = formData.id ? "update" : "create";
-    await fetch("/app/campaigns", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...formData, intent }),
-    });
-    modalHide("campaign-form-modal");
-    setFormData(EMPTY_FORM);
-    revalidator.revalidate();
+    setIsSubmitting(true);
+    try {
+      await fetch("/app/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, intent }),
+      });
+      modalHide("campaign-form-modal");
+      setFormData(EMPTY_FORM);
+      revalidator.revalidate();
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [formData, revalidator]);
 
   const handleDelete = useCallback(async () => {
@@ -573,8 +579,10 @@ export default function CampaignsPage() {
           slot="primary-action"
           variant="primary"
           onClick={handleSubmit}
+          disabled={isSubmitting ? true : undefined}
+          icon={isSubmitting ? "spinner" : undefined}
         >
-          {isEdit ? "Save Changes" : "Create Campaign"}
+          {isSubmitting ? "Saving…" : isEdit ? "Save Changes" : "Create Campaign"}
         </s-button>
         <s-button
           slot="secondary-actions"

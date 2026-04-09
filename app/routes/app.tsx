@@ -1,5 +1,5 @@
 import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
-import { Outlet, useLoaderData, useRouteError, useLocation, useNavigate } from "react-router";
+import { Outlet, useLoaderData, useRouteError, useLocation, useNavigate, useNavigation } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 
@@ -19,10 +19,31 @@ const NAV_LINKS = [
   { href: "/app/settings",    label: "Settings" },
 ] as const;
 
+const loadingBarStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  height: 3,
+  background: "linear-gradient(90deg, #6c63ff, #a78bfa)",
+  zIndex: 9999,
+  animation: "tyt-loading 1.2s ease-in-out infinite",
+};
+
+const loadingKeyframes = `
+  @keyframes tyt-loading {
+    0%   { width: 0%;   opacity: 1; }
+    60%  { width: 85%;  opacity: 1; }
+    100% { width: 95%;  opacity: 0.6; }
+  }
+`;
+
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const navigation = useNavigation();
+
+  const isLoading = navigation.state !== "idle";
 
   const isActive = (href: string) =>
     href === "/app"
@@ -31,6 +52,11 @@ export default function App() {
 
   return (
     <AppProvider embedded apiKey={apiKey}>
+      <style>{loadingKeyframes}</style>
+
+      {/* Top loading bar */}
+      {isLoading && <div style={loadingBarStyle} />}
+
       <s-app-nav>
         {NAV_LINKS.map(({ href, label }) => (
           <a
@@ -43,7 +69,11 @@ export default function App() {
           </a>
         ))}
       </s-app-nav>
-      <Outlet />
+
+      {/* Dim the content while loading */}
+      <div style={{ opacity: isLoading ? 0.5 : 1, transition: "opacity 0.2s ease" }}>
+        <Outlet />
+      </div>
     </AppProvider>
   );
 }

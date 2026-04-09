@@ -2,7 +2,7 @@
 
 client_id = "9d66952838e3964023245442f2948da6"
 name = "Track Your Traffic"
-application_url = "https://shopify-track-your-traffic-34cd.vercel.app/"
+application_url = "https://trackyourtraffic.addoneplugins.com/"
 embedded = true
 
 [build]
@@ -42,9 +42,9 @@ api_version = "2026-04"
 scopes = "read_products,read_orders"
 
 [auth]
-redirect_urls = [ "https://shopify-track-your-traffic-34cd.vercel.app/api/auth" ]
+redirect_urls = [ "https://trackyourtraffic.addoneplugins.com/api/auth" ]
 
 [app_proxy]
-url = "https://shopify-track-your-traffic-34cd.vercel.app/proxy"
+url = "https://trackyourtraffic.addoneplugins.com/proxy"
 subpath = "tyt"
 prefix = "apps"

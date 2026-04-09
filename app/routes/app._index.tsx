@@ -500,7 +500,7 @@ export default function Dashboard() {
 function countryFlag(code: string): string {
   if (!code || code.length !== 2) return "🌐";
   return String.fromCodePoint(
-    ...code.toUpperCase().split("").map((c) => 0x1f1e0 + c.charCodeAt(0) - 65),
+    ...code.toUpperCase().split("").map((c) => 0x1f1e6 + c.charCodeAt(0) - 65),
   );
 }
 

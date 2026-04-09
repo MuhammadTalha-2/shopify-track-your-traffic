@@ -45,9 +45,9 @@ function changeTone(pct: number): "success" | "critical" | "warning" {
 }
 
 const DEVICE_ICON: Record<string, string> = {
-  mobile:  "📱",
-  tablet:  "⬛",
-  desktop: "🖥",
+  mobile:  "mobile",
+  tablet:  "tablet",
+  desktop: "desktop",
 };
 
 // ── Metric Card ───────────────────────────────────────────────────────────────
@@ -402,7 +402,8 @@ export default function Dashboard() {
                 return (
                   <s-stack key={row.deviceType} gap="small-200">
                     <s-stack direction="inline" align-items="center" gap="small-300">
-                      <span style={{ fontSize: 18 }}>{DEVICE_ICON[row.deviceType] ?? "💻"}</span>
+                      {/* @ts-expect-error – icon type valid at runtime */}
+                      <s-icon type={DEVICE_ICON[row.deviceType] ?? "desktop"} color="subdued" />
                       <span style={{ textTransform: "capitalize", fontWeight: 600 }}>
                         {row.deviceType}
                       </span>
@@ -439,12 +440,7 @@ export default function Dashboard() {
                 {stats.byCountry.map((row) => (
                   <s-table-row key={row.country}>
                     <s-table-cell>
-                      <s-stack direction="inline" gap="small-200" align-items="center">
-                        <span style={{ fontSize: 18 }}>
-                          {countryFlag(row.country)}
-                        </span>
-                        <s-text>{row.country}</s-text>
-                      </s-stack>
+                      <s-text>{countryName(row.country)}</s-text>
                     </s-table-cell>
                     <s-table-cell>{row.visits.toLocaleString()}</s-table-cell>
                     <s-table-cell>
@@ -495,12 +491,14 @@ export default function Dashboard() {
   );
 }
 
-/** Convert ISO-2 country code to emoji flag. */
-function countryFlag(code: string): string {
-  if (!code || code.length !== 2) return "🌐";
-  return String.fromCodePoint(
-    ...code.toUpperCase().split("").map((c) => 0x1f1e6 + c.charCodeAt(0) - 65),
-  );
+/** Convert ISO-2 country code to full country name. */
+function countryName(code: string): string {
+  if (!code) return "Unknown";
+  try {
+    return new Intl.DisplayNames(["en"], { type: "region" }).of(code.toUpperCase()) ?? code;
+  } catch {
+    return code;
+  }
 }
 
 export const headers: HeadersFunction = (headersArgs) => {

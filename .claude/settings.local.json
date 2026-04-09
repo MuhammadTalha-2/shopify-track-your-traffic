@@ -45,7 +45,9 @@
       "Bash(find D:/Inshalytics/Shopify/Apps/track-your-traffic -maxdepth 3 -type d -not -path */.git* -not -path */node_modules* -not -path */.react-router* -not -path */dist*)",
       "Bash(grep -E \"\\\\.\\(md|txt|json|toml|yml\\)$\")",
       "Bash(ls .env*)",
-      "Bash(copy \"app\\\\routes\\\\app._index.tsx\" \"app\\\\routes\\\\app.dashboard.tsx\")"
+      "Bash(copy \"app\\\\routes\\\\app._index.tsx\" \"app\\\\routes\\\\app.dashboard.tsx\")",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); console.log\\(process.env.DIRECT_URL ? 'has DIRECT_URL' : 'no DIRECT_URL'\\);\")",
+      "WebSearch"
     ]
   }
 }

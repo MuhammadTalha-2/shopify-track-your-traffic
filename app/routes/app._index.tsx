@@ -62,7 +62,7 @@ function MetricCard({
   channelBadge?: { channel: string };
 }) {
   return (
-    <s-box padding="base" border="base" border-radius="small" background="base">
+    <s-box padding="base" border="base" borderRadius="small" background="base">
       <s-stack gap="small-200">
         <s-text color="subdued">{label}</s-text>
         <s-stack direction="inline" gap="small-300" align-items="center">

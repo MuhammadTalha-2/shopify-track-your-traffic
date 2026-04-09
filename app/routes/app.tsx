@@ -1,5 +1,6 @@
 import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
-import { Outlet, useLoaderData, useRouteError, useNavigation } from "react-router";
+import { Outlet, useLoaderData, useRouteError, useNavigation, useLocation } from "react-router";
+import { useEffect } from "react";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 
@@ -37,17 +38,36 @@ const loadingKeyframes = `
   }
 `;
 
+/** Patch s-page shadow DOM to remove the 966px grid column cap. */
+function patchPageWidth() {
+  document.querySelectorAll("s-page").forEach((page) => {
+    const shadow = (page as any).shadowRoot;
+    if (!shadow) return;
+    shadow.querySelectorAll("s-grid").forEach((grid: any) => {
+      if (grid.getAttribute("gridtemplatecolumns")?.includes("966px")) {
+        grid.setAttribute("gridtemplatecolumns", "100%");
+      }
+    });
+  });
+}
+
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
+  const { pathname } = useLocation();
   const isLoading = navigation.state !== "idle";
+
+  // Run patch after every navigation (page content changes)
+  useEffect(() => {
+    // Run immediately and again after a short delay to catch async renders
+    patchPageWidth();
+    const t = setTimeout(patchPageWidth, 100);
+    return () => clearTimeout(t);
+  }, [pathname, isLoading]);
 
   return (
     <AppProvider embedded apiKey={apiKey}>
-      <style>{`
-        ${loadingKeyframes}
-        s-page::part(page) { padding-inline: 0.5rem !important; }
-      `}</style>
+      <style>{loadingKeyframes}</style>
 
       {/* Top loading bar */}
       {isLoading && <div style={loadingBarStyle} />}

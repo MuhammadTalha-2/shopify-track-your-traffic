@@ -62,7 +62,7 @@ function MetricCard({
   channelBadge?: { channel: string };
 }) {
   return (
-    <s-box padding="base" border="base" border-radius="base" background="base">
+    <s-box padding="base" border="base" border-radius="small" background="base">
       <s-stack gap="small-200">
         <s-text color="subdued">{label}</s-text>
         <s-stack direction="inline" gap="small-300" align-items="center">
@@ -77,7 +77,9 @@ function MetricCard({
           )}
           {channelBadge && (
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            <s-badge tone={(CHANNEL_TONE[channelBadge.channel] ?? "neutral") as any}>
+            <s-badge
+              tone={(CHANNEL_TONE[channelBadge.channel] ?? "neutral") as any}
+            >
               {channelLabel(channelBadge.channel)}
             </s-badge>
           )}

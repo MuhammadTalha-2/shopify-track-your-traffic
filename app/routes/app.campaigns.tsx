@@ -432,8 +432,8 @@ export default function CampaignsPage() {
                       />
                       <s-button
                         variant="tertiary"
-                        icon={duplicatingId === c.id ? "spinner" : "duplicate"}
-                        disabled={duplicatingId === c.id ? true : undefined}
+                        icon="duplicate"
+                        loading={duplicatingId === c.id ? true : undefined}
                         onClick={() => handleDuplicate(c.id)}
                         accessibility-label="Duplicate campaign"
                       />

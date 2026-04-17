@@ -1,8 +1,9 @@
-import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
+import type { ActionFunctionArgs, HeadersFunction, LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { authenticate } from "../shopify.server";
 import { getDashboardStats } from "../lib/queries.server";
+import { getSetting, setSetting } from "~/lib/settings.server";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -10,7 +11,58 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const days = parseInt(url.searchParams.get("days") || "30", 10) || 30;
   const stats = await getDashboardStats(session.shop, days);
-  return { stats };
+
+  // Check if setup banner was already dismissed
+  const setupDismissed = (await getSetting(session.shop, "setup_dismissed")) === "true";
+
+  // Check if the theme app block is installed by inspecting settings_data.json
+  let blockInstalled = false;
+  if (!setupDismissed) {
+    try {
+      const shop  = session.shop;
+      const token = session.accessToken!;
+      const themesRes = await fetch(`https://${shop}/admin/api/2026-04/themes.json?role=main`, {
+        headers: { "X-Shopify-Access-Token": token },
+      });
+      if (themesRes.ok) {
+        const themesData = (await themesRes.json()) as { themes?: { id: number }[] };
+        const mainTheme = themesData?.themes?.[0];
+        if (mainTheme?.id) {
+          const assetRes = await fetch(
+            `https://${shop}/admin/api/2026-04/themes/${mainTheme.id}/assets.json?asset[key]=config/settings_data.json`,
+            { headers: { "X-Shopify-Access-Token": token } },
+          );
+          if (assetRes.ok) {
+            const assetData = (await assetRes.json()) as { asset?: { value?: string } };
+            const content = assetData?.asset?.value ?? "";
+            // Extension UUID from shopify.extension.toml
+            blockInstalled = content.includes("58bfcf2c-0a51-d6d8-ed5a-7d611357865d1920ccde");
+          }
+        }
+      }
+    } catch {
+      // Non-fatal — show banner by default if API check fails
+    }
+  }
+
+  return {
+    stats,
+    shopDomain: session.shop,
+    showSetupBanner: !setupDismissed && !blockInstalled,
+  };
+};
+
+// ── Action (dismiss setup banner) ────────────────────────────────────────────
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const { session } = await authenticate.admin(request);
+  let body: Record<string, unknown> = {};
+  try { body = await request.json(); } catch { /* ignore */ }
+  if (body.intent === "dismiss_setup") {
+    await setSetting(session.shop, "setup_dismissed", "true");
+    return Response.json({ ok: true });
+  }
+  return Response.json({ ok: false }, { status: 400 });
 };
 
 // ── Channel config ────────────────────────────────────────────────────────────
@@ -186,6 +238,103 @@ function Sparkline({ data }: { data: { date: string; visits: number; uniques: nu
   );
 }
 
+// ── Setup Banner ──────────────────────────────────────────────────────────────
+
+const EXT_UUID = "58bfcf2c-0a51-d6d8-ed5a-7d611357865d1920ccde";
+
+function SetupBanner({ shopDomain, onDismiss }: { shopDomain: string; onDismiss: () => void }) {
+  const deepLink =
+    `https://${shopDomain}/admin/themes/current/editor` +
+    `?template=index&addAppBlockId=${encodeURIComponent(`${EXT_UUID}/tyt-tracker-embed`)}&target=newAppsSection`;
+
+  return (
+    <s-section>
+      <div style={{
+        background: "#fffbeb",
+        border: "1px solid #fcd34d",
+        borderRadius: 8,
+        padding: "16px 20px",
+      }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+          {/* Warning icon */}
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+            <path fillRule="evenodd" clipRule="evenodd"
+              d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z"
+              fill="#d97706" />
+          </svg>
+          <div style={{ flex: 1 }}>
+            <p style={{ margin: 0, fontWeight: 700, fontSize: 15, color: "#92400e", marginBottom: 4 }}>
+              Tracking is not active yet
+            </p>
+            <p style={{ margin: 0, fontSize: 14, color: "#78350f", marginBottom: 12 }}>
+              Add the <strong>Track Your Traffic</strong> block to your theme to start counting visits. Takes less than 1 minute.
+            </p>
+
+            {/* Checklist */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="8" fill="#10b981" />
+                  <path d="M4.5 8l2.5 2.5 4.5-4.5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span style={{ color: "#374151" }}>App installed</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" stroke="#d97706" strokeWidth="1.5" fill="none" />
+                  <text x="8" y="12" textAnchor="middle" fontSize="10" fill="#d97706" fontWeight="bold">2</text>
+                </svg>
+                <span style={{ color: "#374151", fontWeight: 600 }}>Add tracking block to theme</span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <a
+                href={deepLink}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  background: "#2c6ecb", color: "#fff",
+                  padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M1 7h12M8 2l5 5-5 5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Open Theme Editor
+              </a>
+              <button
+                onClick={onDismiss}
+                style={{
+                  background: "transparent", border: "1px solid #d97706",
+                  color: "#92400e", padding: "8px 16px", borderRadius: 6,
+                  fontSize: 14, fontWeight: 500, cursor: "pointer",
+                }}
+              >
+                I've already done this
+              </button>
+            </div>
+          </div>
+
+          {/* Dismiss X */}
+          <button
+            onClick={onDismiss}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 2, color: "#92400e", flexShrink: 0 }}
+            aria-label="Dismiss"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </s-section>
+  );
+}
+
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
 const DATE_RANGES = [
@@ -197,9 +346,19 @@ const DATE_RANGES = [
 ] as const;
 
 export default function Dashboard() {
-  const { stats } = useLoaderData<typeof loader>();
+  const { stats, showSetupBanner, shopDomain } = useLoaderData<typeof loader>();
   const navigate  = useNavigate();
   const [days, setDays] = useState(String(stats.period));
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
+  const handleDismissSetup = useCallback(async () => {
+    setBannerDismissed(true);
+    await fetch("/app/dashboard", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ intent: "dismiss_setup" }),
+    });
+  }, []);
 
   const visitsPct   = pctDiff(stats.totalVisits,    stats.prevTotalVisits);
   const uniquesPct  = pctDiff(stats.uniqueVisitors, stats.prevUniqueVisitors);
@@ -217,6 +376,9 @@ export default function Dashboard() {
 
   return (
     <s-page heading="Track Your Traffic" inline-size="full">
+      {showSetupBanner && !bannerDismissed && (
+        <SetupBanner shopDomain={shopDomain} onDismiss={handleDismissSetup} />
+      )}
       <style>{`
         *, *::before, *::after { box-sizing: border-box; }
         .tyt-kpi-grid       { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }

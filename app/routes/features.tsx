@@ -44,12 +44,7 @@ export default function FeaturesPage() {
   border-top: 1px solid #e5e7eb;
   padding: 12px 16px 16px;
   gap: 4px;
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
-  z-index: 200;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 .tyt-mobile-link {
   padding: 10px 14px;

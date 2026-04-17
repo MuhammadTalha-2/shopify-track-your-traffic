@@ -26,55 +26,32 @@ export default function TermsOfService() {
       flexDirection: "column",
     }}>
 
-      {/* Top Navigation */}
-      <header style={{
-        borderBottom: "1px solid #e1e3e5",
-        padding: "0 24px",
-        background: "#fff",
-      }}>
-        <div style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 60,
-        }}>
-          {/* Logo */}
+      {/* Header */}
+      <header style={{ borderBottom: "1px solid #e5e7eb", padding: "0 24px", background: "#fff", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
           <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="28" height="28" rx="6" fill="#2c6ecb" fillOpacity="0.1" />
-              <rect x="5" y="17" width="4" height="7" rx="1" fill="#2c6ecb" />
-              <rect x="12" y="11" width="4" height="13" rx="1" fill="#2c6ecb" />
-              <rect x="19" y="5" width="4" height="19" rx="1" fill="#2c6ecb" />
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="6" fill="#2c6ecb" />
+              <rect x="5" y="16" width="4" height="7"  rx="1" fill="#fff" />
+              <rect x="12" y="11" width="4" height="12" rx="1" fill="#fff" />
+              <rect x="19" y="5"  width="4" height="18" rx="1" fill="#fff" />
             </svg>
-            <span style={{ fontWeight: 700, fontSize: 16, color: "#202223" }}>Track Your Traffic</span>
+            <span style={{ fontWeight: 700, fontSize: 16, color: "#111827", letterSpacing: "-0.02em" }}>Track Your Traffic</span>
           </a>
-
-          {/* Nav Links */}
-          <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+          <nav style={{ display: "flex", alignItems: "center", gap: 4 }}>
             {[
               { label: "Features", href: "/features" },
               { label: "Pricing",  href: "/pricing"  },
               { label: "Help",     href: "/help"     },
               { label: "Privacy",  href: "/privacy"  },
             ].map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                style={{
-                  color: "#6d7175",
-                  textDecoration: "none",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  transition: "color 0.15s",
-                }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#2c6ecb")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#6d7175")}
-              >
+              <a key={label} href={href} style={{ padding: "6px 14px", borderRadius: 6, fontSize: 14, fontWeight: 500, color: "#6b7280", textDecoration: "none" }}>
                 {label}
               </a>
             ))}
+            <a href="/" style={{ marginLeft: 8, padding: "8px 18px", borderRadius: 8, fontSize: 14, fontWeight: 600, color: "#fff", background: "#2c6ecb", textDecoration: "none" }}>
+              Install App
+            </a>
           </nav>
         </div>
       </header>

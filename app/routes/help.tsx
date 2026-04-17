@@ -58,11 +58,11 @@ export default function HelpPage() {
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
           {/* Logo */}
           <a href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="12" width="4" height="10" rx="1" fill="#2c6ecb" />
-              <rect x="8" y="7" width="4" height="15" rx="1" fill="#2c6ecb" />
-              <rect x="14" y="3" width="4" height="19" rx="1" fill="#2c6ecb" />
-              <rect x="20" y="9" width="2" height="13" rx="1" fill="#93c5fd" />
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="6" fill="#2c6ecb" />
+              <rect x="5"  y="16" width="4" height="7"  rx="1" fill="#fff" />
+              <rect x="12" y="11" width="4" height="12" rx="1" fill="#fff" />
+              <rect x="19" y="5"  width="4" height="18" rx="1" fill="#fff" />
             </svg>
             <span style={{ fontSize: "17px", fontWeight: 700, color: "#111827" }}>Track Your Traffic</span>
           </a>

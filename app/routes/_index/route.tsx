@@ -15,22 +15,62 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { showForm: Boolean(login) };
 };
 
+function LogoIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <rect width="28" height="28" rx="6" fill="#2c6ecb" />
+      <rect x="5"  y="16" width="4" height="7"  rx="1" fill="#fff" />
+      <rect x="12" y="11" width="4" height="12" rx="1" fill="#fff" />
+      <rect x="19" y="5"  width="4" height="18" rx="1" fill="#fff" />
+    </svg>
+  );
+}
+
 export default function App() {
   const { showForm } = useLoaderData<typeof loader>();
 
   return (
     <div className={styles.index}>
-      {/* Nav */}
-      <nav className={styles.nav}>
-        <span className={styles.navBrand}>
-          <span className={styles.navDot} />
-          Track Your Traffic
-        </span>
-        <span className={styles.navBadge}>Shopify App</span>
-      </nav>
 
-      {/* Hero */}
-      <section className={styles.hero}>
+      {/* ── Header / Nav ───────────────────────────────────────────── */}
+      <header className={styles.nav}>
+        <a href="/" className={styles.navBrand}>
+          <LogoIcon />
+          Track Your Traffic
+        </a>
+
+        <nav className={styles.navLinks}>
+          {[
+            { label: "Features", href: "/features" },
+            { label: "Pricing",  href: "/pricing"  },
+            { label: "Help",     href: "/help"      },
+            { label: "Privacy",  href: "/privacy"   },
+          ].map(({ label, href }) => (
+            <a key={label} href={href} className={styles.navLink}>{label}</a>
+          ))}
+        </nav>
+
+        {showForm && (
+          <Form method="post" action="/auth/login" style={{ display: "flex", alignItems: "center" }}>
+            <input type="hidden" name="shop" id="nav-shop-input" />
+            <a
+              href="#install"
+              className={styles.navCta}
+              onClick={(e) => {
+                e.preventDefault();
+                const input = document.querySelector<HTMLInputElement>("input[name='shop']");
+                input?.focus();
+                input?.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
+            >
+              Install App
+            </a>
+          </Form>
+        )}
+      </header>
+
+      {/* ── Hero ───────────────────────────────────────────────────── */}
+      <section className={styles.hero} id="install">
         <span className={styles.pill}>UTM Analytics for Shopify</span>
 
         <h1 className={styles.heading}>
@@ -61,7 +101,7 @@ export default function App() {
         )}
       </section>
 
-      {/* Stats bar */}
+      {/* ── Stats bar ──────────────────────────────────────────────── */}
       <div className={styles.stats}>
         <div className={styles.stat}>
           <span className={styles.statValue}>UTM</span>
@@ -81,57 +121,67 @@ export default function App() {
         </div>
       </div>
 
-      {/* Features */}
-      <div className={styles.features}>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>📊</span>
-          <p className={styles.featureTitle}>UTM Campaign Tracking</p>
-          <p className={styles.featureDesc}>
-            Track every UTM-tagged campaign and see exactly how many visits each one generates. Set goals and monitor progress.
-          </p>
+      {/* ── Features ───────────────────────────────────────────────── */}
+      <section className={styles.featuresSection}>
+        <div className={styles.featuresSectionInner}>
+          <h2 className={styles.featuresHeading}>Everything you need to understand your traffic</h2>
+          <p className={styles.featuresSubtext}>Powerful analytics built directly into your Shopify admin — no external tools needed.</p>
+          <div className={styles.features}>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>📊</span>
+              <p className={styles.featureTitle}>UTM Campaign Tracking</p>
+              <p className={styles.featureDesc}>
+                Track every UTM-tagged campaign and see exactly how many visits each one generates. Set goals and monitor progress.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🔀</span>
+              <p className={styles.featureTitle}>Traffic Source Breakdown</p>
+              <p className={styles.featureDesc}>
+                See which channels — organic search, paid ads, social, email, and more — are driving visitors to your store.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🌍</span>
+              <p className={styles.featureTitle}>Device &amp; Country Insights</p>
+              <p className={styles.featureDesc}>
+                Understand whether your visitors are on mobile or desktop, and where they are in the world.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🔗</span>
+              <p className={styles.featureTitle}>UTM Link Builder</p>
+              <p className={styles.featureDesc}>
+                Generate perfectly formatted UTM URLs for any campaign. Bulk-tag multiple URLs at once with a single click.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🚫</span>
+              <p className={styles.featureTitle}>IP Filtering</p>
+              <p className={styles.featureDesc}>
+                Exclude your own visits and team traffic so your analytics stay clean and accurate.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>📤</span>
+              <p className={styles.featureTitle}>CSV Export</p>
+              <p className={styles.featureDesc}>
+                Export your visit data any time for reporting, sharing with clients, or deeper analysis in a spreadsheet.
+              </p>
+            </div>
+          </div>
         </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>🔀</span>
-          <p className={styles.featureTitle}>Traffic Source Breakdown</p>
-          <p className={styles.featureDesc}>
-            See which channels — organic search, paid ads, social, email, and more — are driving visitors to your store.
-          </p>
-        </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>🌍</span>
-          <p className={styles.featureTitle}>Device &amp; Country Insights</p>
-          <p className={styles.featureDesc}>
-            Understand whether your visitors are on mobile or desktop, and where they are in the world.
-          </p>
-        </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>🔗</span>
-          <p className={styles.featureTitle}>UTM Link Builder</p>
-          <p className={styles.featureDesc}>
-            Generate perfectly formatted UTM URLs for any campaign. Bulk-tag multiple URLs at once with a single click.
-          </p>
-        </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>🚫</span>
-          <p className={styles.featureTitle}>IP Filtering</p>
-          <p className={styles.featureDesc}>
-            Exclude your own visits and team traffic so your analytics stay clean and accurate.
-          </p>
-        </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>📤</span>
-          <p className={styles.featureTitle}>CSV Export</p>
-          <p className={styles.featureDesc}>
-            Export your visit data any time for reporting, sharing with clients, or deeper analysis in a spreadsheet.
-          </p>
-        </div>
-      </div>
+      </section>
 
-      {/* Footer */}
+      {/* ── Footer ──────────────────────────────────────────────────── */}
       <footer className={styles.footer}>
-        <p>
-          &copy; {new Date().getFullYear()} Track Your Traffic &nbsp;·&nbsp;{" "}
+        <p style={{ margin: 0 }}>
+          &copy; {new Date().getFullYear()} AddOne Plugins &nbsp;·&nbsp;{" "}
           <a href="/privacy">Privacy Policy</a>
+          &nbsp;·&nbsp;{" "}
+          <a href="/terms">Terms of Service</a>
+          &nbsp;·&nbsp;{" "}
+          <a href="/help">Help</a>
         </p>
       </footer>
     </div>

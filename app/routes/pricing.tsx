@@ -31,8 +31,8 @@ const pageWrap: React.CSSProperties = {
 function LogoIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <rect width="28" height="28" rx="6" fill={BLUE} />
-      <rect x="5"  y="16" width="4" height="7" rx="1" fill="#fff" />
+      <rect width="28" height="28" rx="6" fill="#2c6ecb" />
+      <rect x="5"  y="16" width="4" height="7"  rx="1" fill="#fff" />
       <rect x="12" y="11" width="4" height="12" rx="1" fill="#fff" />
       <rect x="19" y="5"  width="4" height="18" rx="1" fill="#fff" />
     </svg>

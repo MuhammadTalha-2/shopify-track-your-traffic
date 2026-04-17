@@ -14,14 +14,43 @@ const LI: React.CSSProperties = { marginBottom: 6 };
 
 export default function PrivacyPolicy() {
   return (
+    <div style={{ fontFamily: "system-ui, -apple-system, sans-serif", color: "#202223", lineHeight: 1.75, fontSize: 15, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+
+      {/* Header */}
+      <header style={{ borderBottom: "1px solid #e5e7eb", padding: "0 24px", background: "#fff", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
+          <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="6" fill="#2c6ecb" />
+              <rect x="5" y="16" width="4" height="7"  rx="1" fill="#fff" />
+              <rect x="12" y="11" width="4" height="12" rx="1" fill="#fff" />
+              <rect x="19" y="5"  width="4" height="18" rx="1" fill="#fff" />
+            </svg>
+            <span style={{ fontWeight: 700, fontSize: 16, color: "#111827", letterSpacing: "-0.02em" }}>Track Your Traffic</span>
+          </a>
+          <nav style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {[
+              { label: "Features", href: "/features" },
+              { label: "Pricing",  href: "/pricing"  },
+              { label: "Help",     href: "/help"     },
+              { label: "Privacy",  href: "/privacy", active: true },
+            ].map(({ label, href, active }) => (
+              <a key={label} href={href} style={{ padding: "6px 14px", borderRadius: 6, fontSize: 14, fontWeight: active ? 600 : 500, color: active ? "#2c6ecb" : "#6b7280", background: active ? "#eff6ff" : "transparent", textDecoration: "none" }}>
+                {label}
+              </a>
+            ))}
+            <a href="/" style={{ marginLeft: 8, padding: "8px 18px", borderRadius: 8, fontSize: 14, fontWeight: 600, color: "#fff", background: "#2c6ecb", textDecoration: "none" }}>
+              Install App
+            </a>
+          </nav>
+        </div>
+      </header>
+
     <div style={{
       maxWidth: 760,
       margin: "0 auto",
       padding: "56px 24px 80px",
-      fontFamily: "system-ui, -apple-system, sans-serif",
-      color: "#202223",
-      lineHeight: 1.75,
-      fontSize: 15,
+      flex: 1,
     }}>
 
       {/* Header */}
@@ -212,6 +241,7 @@ export default function PrivacyPolicy() {
       }}>
         This Privacy Policy applies solely to the Track Your Traffic Shopify App developed by AddOne Plugins.
       </p>
+    </div>
     </div>
   );
 }
